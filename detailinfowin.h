@@ -2,7 +2,8 @@
 #define DETAILINFO_H
 
 #include <QWidget>
-#include"QListWidget"
+#include<QTableWidget>
+#include<QListWidget>
 namespace Ui {
 class DetailInfoWin;
 }
@@ -10,11 +11,13 @@ class DetailInfoWin;
 class DetailInfoWin : public QWidget
 {
     Q_OBJECT
-    QListWidgetItem* listItem;
+  //  QListWidgetItem* listItem;
 public:
+    Ui::DetailInfoWin *ui;
     explicit DetailInfoWin(QWidget *parent = 0);
     ~DetailInfoWin();
     void showDetail(QListWidgetItem* item);
+    void loadTable(QListWidgetItem* listItem);
 private slots:
     void on_add_btn_clicked();
 
@@ -23,7 +26,7 @@ private slots:
     void on_cancel_btn_clicked();
 
 private:
-    Ui::DetailInfoWin *ui;
+
 };
 
 #endif // DETAILINFO_H

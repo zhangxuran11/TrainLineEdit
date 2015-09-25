@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 #include"detailinfowin.h"
-#include "linewin.h"
+#include "lineswin.h"
 
 namespace Ui {
 class MainWindow;

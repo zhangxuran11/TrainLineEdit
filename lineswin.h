@@ -1,6 +1,5 @@
 #ifndef LINEWIN_H
 #define LINEWIN_H
-#include"domparser.h"
 #include <QWidget>
 #include"globalinfo.h"
 #include "ui_lineswin.h"
@@ -13,13 +12,15 @@ class LineWin;
 class LineWin : public QWidget
 {
     Q_OBJECT
-    DomParser domParser;
+//    DomParser domParser;
 public:
+    Ui::LineWin *ui;
     explicit LineWin(QWidget *parent = 0);
     ~LineWin();
     
 private:
     bool isRepeat_listWidget(QListWidgetItem* item);
+    void loadListWidget();
 private slots:
     void on_create_btn_clicked();
     void on_listWidget_itemChanged(QListWidgetItem *item);
@@ -31,7 +32,7 @@ private slots:
     void on_delete_btn_clicked();
 
 private:
-    Ui::LineWin *ui;
+
 };
 
 #endif // LINEWIN_H

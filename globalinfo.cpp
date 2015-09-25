@@ -1,9 +1,10 @@
 #include "globalinfo.h"
-#include"linewin.h"
+#include"lineswin.h"
 #include"detailinfowin.h"
 GlobalInfo*  GlobalInfo::_instance = NULL;
 GlobalInfo::GlobalInfo()
 {
+    db = new DBService("TrainLineDao.db");
 }
 GlobalInfo* GlobalInfo::getInstance()
 {
