@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     line_w = new LineWin(this);
     detail_w = new DetailInfoWin(this);
-    connect(line_w->ui->listWidget,SIGNAL(doubleClicked(QModelIndex)),keyboard,SLOT(show(QModelIndex)));
-    connect(detail_w->ui->tableWidget,SIGNAL(doubleClicked(QModelIndex)),keyboard,SLOT(show(QModelIndex)));
+    connect(line_w->ui->listView,SIGNAL(doubleClicked(QModelIndex)),keyboard,SLOT(show(QModelIndex)));
+    connect(detail_w->ui->tableView,SIGNAL(doubleClicked(QModelIndex)),keyboard,SLOT(show(QModelIndex)));
     line_w->show();
     detail_w->hide();
 }
@@ -24,3 +24,5 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+

@@ -9,7 +9,6 @@ DROP TABLE IF EXISTS tb_station_info;
 CREATE TABLE tb_station_info (
           station_id  INTEGER    PRIMARY KEY AUTOINCREMENT,
           line_id   INTEGER,
-          line_name VARCHAR2(50) NOT NULL UNIQUE,
           station_name_en VARCHAR2(50),
           station_name_th VARCHAR2(50),
           start_time VARCHAR2(10),

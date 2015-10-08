@@ -14,6 +14,7 @@ public:
     const QByteArray getPara(const QString& paraName)const{return _resMap[paraName];}
     int count()const{return _resMap.count();}
     QByteArray getPara(int index)const{return _resMap[_resMap.keys()[index]];}
+    void print();
 };
 class ResultSet
 {
@@ -23,7 +24,7 @@ public:
     ResultSet();
     int count()const{return resultList.count();}
     const ResultRow& operator [] (int i)const{return resultList[i];}
-
+    void print();
 };
 
 #endif // RESULTSET_H

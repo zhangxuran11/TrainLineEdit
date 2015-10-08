@@ -15,13 +15,27 @@ DBService::DBService(const QString& dbName )
         return;
     }
     database.setDatabaseName(dbName);
+    open();
+}
+bool DBService::open()
+{
+    if(!database.open())
+    {
+        qDebug()<<database.lastError();
+        return false;
+    }
+    return true;
+}
+void DBService::close()
+{
+    database.close();
 }
 ResultSet  DBService::query(const QString& sqlQuery)
 {
     ResultSet results;
-    if(!database.open())
+    isValid = true;
+    if(!open())
     {
-        qDebug()<<database.lastError();
         isValid = false;
         return results;
     }
@@ -47,7 +61,7 @@ ResultSet  DBService::query(const QString& sqlQuery)
         }
 
     }
-    database.close();
+    close();
     return results;
 }
 bool  DBService::exec(const QString& sqlInsert)

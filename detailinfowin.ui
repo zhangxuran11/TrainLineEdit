@@ -13,71 +13,6 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QTableWidget" name="tableWidget">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>50</y>
-     <width>661</width>
-     <height>451</height>
-    </rect>
-   </property>
-   <row>
-    <property name="text">
-     <string/>
-    </property>
-   </row>
-   <row>
-    <property name="text">
-     <string>新建行</string>
-    </property>
-   </row>
-   <row>
-    <property name="text">
-     <string>新建行</string>
-    </property>
-   </row>
-   <row>
-    <property name="text">
-     <string>新建行</string>
-    </property>
-   </row>
-   <row>
-    <property name="text">
-     <string>新建行</string>
-    </property>
-   </row>
-   <column>
-    <property name="text">
-     <string>Station No</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Station Name</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Start Time</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Arrive TIme</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Lat</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Lng</string>
-    </property>
-   </column>
-  </widget>
   <widget class="QPushButton" name="add_btn">
    <property name="geometry">
     <rect>
@@ -124,6 +59,16 @@
      <y>0</y>
      <width>3</width>
      <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTableView" name="tableView">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>40</y>
+     <width>611</width>
+     <height>461</height>
     </rect>
    </property>
   </widget>

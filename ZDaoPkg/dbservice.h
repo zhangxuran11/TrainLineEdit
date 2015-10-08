@@ -4,11 +4,16 @@
 #include"resultset.h"
 class DBService
 {
-    bool isValid;
-    QSqlDatabase database;
-public:
-    explicit DBService(const QString& dbName);
 
+
+public:
+    QSqlDatabase database;
+    bool isValid;
+    explicit DBService(const QString& dbName);
+    ~DBService(){close();}
+
+    bool open();
+    void close();
     bool  exec(const QString& sqlInsert);
     ResultSet  query(const QString& sqlQuery);
 };

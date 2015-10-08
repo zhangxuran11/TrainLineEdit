@@ -4,28 +4,27 @@
 #include<QApplication>
 #include"resultset.h"
 #include"bean.h"
+#include"globalinfo.h"
+#include<QSqlRecord>
 LineWin::LineWin(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LineWin)
 {
-    GlobalInfo::getInstance()->lineW = this;
     ui->setupUi(this);
-    loadListWidget();
-}
-void LineWin::loadListWidget()
-{
-    QListWidget* listWidget = ui->listWidget;
-    listWidget->clear();
-    ResultSet set = GlobalInfo::getInstance()->db->query("select * form tb_lines_info");
-    for(int i = 0;i < set.count();i++)
-    {
-        QListWidgetItem* newItem = new QListWidgetItem(set[i].getPara("line_name"));
-        newItem->setFlags (newItem->flags () |Qt::ItemIsEditable);
-        listWidget->addItem(newItem);
+    GlobalInfo::getInstance()->lineW = this;
 
-        GlobalInfo::getInstance()->lineInfoMap.insert(newItem,LineInfo(set[i].getPara("line_id"),set[i].getPara("line_name"),set[i].getPara("start_station_id"),set[i].getPara("end_station_id"),false));
-    }
+    model = new QSqlTableModel(0,GlobalInfo::getInstance()->db->database);
+    connect(model, SIGNAL(dataChanged(const QModelIndex&,const QModelIndex&)), this, SLOT(onItemChanged(const QModelIndex&,const QModelIndex&)));
+
+    model->setTable("tb_lines_info");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->setSort(model->record().indexOf("line_id"), Qt::AscendingOrder);
+    model->select();
+    model->database().transaction();
+    ui->listView->setModel(model);
+    ui->listView->setModelColumn(model->record().indexOf("line_name"));
 }
+
 LineWin::~LineWin()
 {
     delete ui;
@@ -33,11 +32,14 @@ LineWin::~LineWin()
 
 void LineWin::on_create_btn_clicked()
 {
-    QListWidgetItem* newItem = new QListWidgetItem("please input line name...");
-    newItem->setFlags (newItem->flags () |Qt::ItemIsEditable);
-    ui->listWidget->addItem(newItem);
-    ui->listWidget->editItem(newItem);
-    ui->listWidget->setCurrentItem(newItem);
+    model->insertRow(model->rowCount());
+    model->submitAll();
+    int column = model->record().indexOf("line_name");
+    QModelIndex index = model->index(model->rowCount()-1, column);
+
+    ui->listView->setCurrentIndex(index);
+    ui->listView->edit(index);
+
     ui->create_btn->setDisabled(true);
     ui->edit_btn->setDisabled(true);
 }
@@ -46,58 +48,62 @@ void LineWin::on_create_btn_clicked()
 
 
 
-void LineWin::on_listWidget_itemChanged(QListWidgetItem *item)
+void LineWin::onItemChanged(const QModelIndex& topLeft,const QModelIndex&)
 {
-    if(isRepeat_listWidget(item))
+    if(isRepeat_listView(topLeft))
     {
+        ui->create_btn->setDisabled(true);
+        ui->edit_btn->setDisabled(true);
+        ui->listView->setCurrentIndex(topLeft);
+        ui->listView->edit(topLeft);
         ui->label->setText("Line has existed,please input a valid line.");
-        ui->listWidget->editItem(item);
     }
     else
     {
+        ui->label->setText("");
         ui->create_btn->setDisabled(false);
         ui->edit_btn->setDisabled(false);
-        QString sql = QString("inser into tb_lines_info (line_name) values(%1)").arg(item->text());
-        if(!GlobalInfo::getInstance()->db->exec(sql))
-        {
-            qDebug("insert  failed !!");
-        }
-        sql = QString("select * from tb_lines_info where line_name=%1 ").arg(item->text());
-        ResultSet set = GlobalInfo::getInstance()->db->query(sql);
-        GlobalInfo::getInstance()->lineInfoMap.insert(item,LineInfo(set[0].getPara("line_id"),item->text(),set[0].getPara("start_station_id"),set[0].getPara("end_station_id"),true));
+        model->submitAll();
+
     }
 }
-bool LineWin::isRepeat_listWidget(QListWidgetItem* item)
+bool LineWin::isRepeat_listView(const QModelIndex& index)
 {
-    for(int i = 0;i < ui->listWidget->count();i++)
+    for(int i = 0;i < model->rowCount();i++)
     {
-        if(ui->listWidget->item(i)->text() == item->text() && ui->listWidget->item(i) != item)
+        if(i == index.row())
+            continue;
+        if(model->record(i).value("line_name").toString() == model->data(index).toString())
             return true;
     }
     return false;
 }
 void LineWin::on_save_btn_clicked()
 {
-    GlobalInfo::getInstance()->db->exec("update tb_lines_info set isNew=false where isNew=true");
-    GlobalInfo::getInstance()->db->exec("update tb_station_info set isNew=false where isNew=true");
+    model->database().commit();
+    model->database().transaction();
+
 }
 
 void LineWin::on_close_btn_clicked()
 {
-     GlobalInfo::getInstance()->db->exec("delete from tb_lines_info where isNew=true");
-     GlobalInfo::getInstance()->db->exec("delete from tb_station_info where isNew=true");
+    model->database().rollback();
+    QString sqlStr = QString("delete from tb_station_info where line_id not in (select line_id from tb_lines_info )");
+    GlobalInfo::getInstance()->db->exec(sqlStr);
      QApplication::quit();
 }
 
 void LineWin::on_edit_btn_clicked()
 {
-    if(ui->listWidget->count() == 0)
+    if(model->rowCount() == 0)
         return;
     this->hide();
-
+    GlobalInfo::getInstance()->detailW->showDetail(ui->listView->currentIndex());
 }
 
 void LineWin::on_delete_btn_clicked()
 {
-    ui->listWidget->takeItem(ui->listWidget->count() - 1);
+    int curRow = ui->listView->currentIndex().row();
+    model->removeRow(curRow);
+    model->submitAll();
 }

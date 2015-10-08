@@ -4,6 +4,7 @@
 #include <QWidget>
 #include<QTableWidget>
 #include<QListWidget>
+#include<QSqlTableModel>
 namespace Ui {
 class DetailInfoWin;
 }
@@ -11,13 +12,14 @@ class DetailInfoWin;
 class DetailInfoWin : public QWidget
 {
     Q_OBJECT
+    int line_id;
   //  QListWidgetItem* listItem;
 public:
+    QSqlTableModel* model;
     Ui::DetailInfoWin *ui;
     explicit DetailInfoWin(QWidget *parent = 0);
     ~DetailInfoWin();
-    void showDetail(QListWidgetItem* item);
-    void loadTable(QListWidgetItem* listItem);
+    void showDetail(const QModelIndex& index);
 private slots:
     void on_add_btn_clicked();
 

@@ -3,66 +3,52 @@
 #include<QListWidget>
 #include"globalinfo.h"
 #include"lineswin.h"
+#include<QSqlRecord>
+#include<QDebug>
 DetailInfoWin::DetailInfoWin(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DetailInfoWin)
 {
     GlobalInfo::getInstance()->detailW = this;
     ui->setupUi(this);
+
+    model = new QSqlTableModel(0,GlobalInfo::getInstance()->db->database);
+
+
 }
 
 DetailInfoWin::~DetailInfoWin()
 {
     delete ui;
 }
-void DetailInfoWin::loadTable(QListWidgetItem* listItem)
+
+void DetailInfoWin::showDetail(const QModelIndex& index)
 {
-    QTableWidget* tableWidget = ui->tableWidget;
-    tableWidget->setRowCount(0);
-    QString sql = QString("select * from tb_station_info where line_id=(select line_id from tb_lines_info where line_name=%1)").arg(listItem->text());
-    ResultSet set = GlobalInfo::getInstance()->db->query(sql);
-    for(int i = 0;i < set.count();i++)
-    {
-        tableWidget->insertRow(tableWidget->rowCount());
-        QTableWidgetItem* newItem = new QTableWidgetItem(QString::fromUtf8(set[i].getPara("station_id")));
-        tableWidget->setItem(tableWidget->rowCount() - 1,0,newItem);
-        newItem = new QTableWidgetItem(QString::fromUtf8(set[i].getPara("station_name")));
-        tableWidget->setItem(tableWidget->rowCount() - 1,1,newItem);
-        newItem = new QTableWidgetItem(QString::fromUtf8(set[i].getPara("start_time")));
-        tableWidget->setItem(tableWidget->rowCount() - 1,2,newItem);
-        newItem = new QTableWidgetItem(QString::fromUtf8(set[i].getPara("arrive_time")));
-        tableWidget->setItem(tableWidget->rowCount() - 1,3,newItem);
-        newItem = new QTableWidgetItem(QString::fromUtf8(set[i].getPara("lat")));
-        tableWidget->setItem(tableWidget->rowCount() - 1,4,newItem);
-        newItem = new QTableWidgetItem(QString::fromUtf8(set[i].getPara("lng")));
-        tableWidget->setItem(tableWidget->rowCount() - 1,5,newItem);
-    }
-}
-void DetailInfoWin::showDetail(QListWidgetItem* item)
-{
-    loadTable(item);
+
+    model->setTable("tb_station_info");
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->select();
+    ui->tableView->setModel(model);
+    ui->tableView->hideColumn(model->record().indexOf("line_id"));
+    ui->tableView->hideColumn(model->record().indexOf("station_id"));
+
+    line_id = GlobalInfo::getInstance()->lineW->model->record(index.row()).value("line_id").toInt();
+    model->setFilter(QObject::tr("line_id=%1").arg(line_id));
+    model->submitAll();
     show();
 }
 
 void DetailInfoWin::on_add_btn_clicked()
 {
-    ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-    for(int i = 0;i < ui->tableWidget->columnCount();i++)
-    {
-        ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1,i,new QTableWidgetItem);
-    }
+    model->insertRow(model->rowCount());
+    model->setData(model->index(model->rowCount()-1,model->record().indexOf("line_id")),line_id);
+    model->submitAll();
 }
 
 
 void DetailInfoWin::on_ok_btn_clicked()
 {
-    for(int i = 0;i< ui->tableWidget->rowCount();i++)
-    {
-        QString sql = QString("update tb_station_info set line_name='%1' where station_id=%2").arg(ui->tableWidget->item(i,1)->text()).arg(ui->tableWidget->item(i,0)->text());
-        GlobalInfo::getInstance()->db->exec(sql);
-        sql = QString("insert into tb_station_info (line_name,start_time,arrive_time,lat,lng) where %1 not in (select station_id from tb_station_info)").arg(ui->tableWidget->item(i,0)->text());
-        GlobalInfo::getInstance()->db->exec(sql);
-    }
+    model->submitAll();
     this->hide();
     GlobalInfo::getInstance()->lineW->show();
 }

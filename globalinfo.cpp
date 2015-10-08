@@ -4,7 +4,7 @@
 GlobalInfo*  GlobalInfo::_instance = NULL;
 GlobalInfo::GlobalInfo()
 {
-    db = new DBService("TrainLineDao.db");
+    db = new DBService("TrainLine.db");
 }
 GlobalInfo* GlobalInfo::getInstance()
 {

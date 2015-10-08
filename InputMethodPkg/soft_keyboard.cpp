@@ -7,31 +7,32 @@ void Soft_Keyboard::show()
 }
 void Soft_Keyboard::show(const QModelIndex& _modelIndex)
 {
-    QTableWidget* tableWidget;
-    QListWidget* listWidget;
+//    QTableView* tableView;
+//    QListView* listView;
     currentEditWidget = sender();
     modelIndex = _modelIndex;
     QDialog::show();
-    tableWidget = dynamic_cast<QTableWidget*>(currentEditWidget);
-    if(tableWidget != NULL)
-    {
-        QTableWidgetItem* item = tableWidget->item(modelIndex.row(),modelIndex.column());
-        if(item == NULL)
-        {
-            item = new QTableWidgetItem("");
-            tableWidget->setItem(modelIndex.row(),modelIndex.column(),item);
-        }
-    }
-    listWidget = dynamic_cast<QListWidget*>(currentEditWidget);
-    if(listWidget != NULL)
-    {
-        QListWidgetItem* item = listWidget->item(modelIndex.row());
-        if(item == NULL)
-        {
-            item = new QListWidgetItem("");
-            listWidget->insertItem(modelIndex.row(),item);
-        }
-    }
+//    tableView = dynamic_cast<QTableView*>(currentEditWidget);
+//    if(tableView != NULL)
+//    {
+//        tableView->itemDelegate()
+//        QTableWidgetItem* item = tableView->item(modelIndex.row(),modelIndex.column());
+//        if(item == NULL)
+//        {
+//            item = new QTableWidgetItem("");
+//            tableWidget->setItem(modelIndex.row(),modelIndex.column(),item);
+//        }
+//    }
+//    listView = dynamic_cast<QListView*>(currentEditWidget);
+//    if(listView != NULL)
+//    {
+//        QListWidgetItem* item = listWidget->item(modelIndex.row());
+//        if(item == NULL)
+//        {
+//            item = new QListWidgetItem("");
+//            listWidget->insertItem(modelIndex.row(),item);
+//        }
+//    }
 
 }
 
@@ -137,8 +138,8 @@ void Soft_Keyboard::slot_Letter_PushBtn_Clicked(){
     QPushButton *aPushButton = dynamic_cast<QPushButton*>(sender());
     QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(currentEditWidget);
     QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(currentEditWidget);
-    QListWidget* listWidget = dynamic_cast<QListWidget*>(currentEditWidget);
-    QTableWidget* tableWidget = dynamic_cast<QTableWidget*>(currentEditWidget);
+    QListView* listView = dynamic_cast<QListView*>(currentEditWidget);
+    QTableView* tableView = dynamic_cast<QTableView*>(currentEditWidget);
     QString text;
     if(aPushButton->text() == "&&")
         text = "&";
@@ -152,15 +153,15 @@ void Soft_Keyboard::slot_Letter_PushBtn_Clicked(){
         currentTextEdit->append(text);
         goto label_end;
     }
-    if(listWidget != NULL){
-        QListWidgetItem* item = listWidget->item(modelIndex.row());
-        item->setText(item->text() + text);
+    if(listView != NULL){
+        QString str = listView->model()->data(modelIndex).toString()+text;
+        listView->model()->setData(modelIndex,str);
         goto label_end;
     }
-    if(tableWidget != NULL){
+    if(tableView != NULL){
 
-        QTableWidgetItem* item = tableWidget->item(modelIndex.row(),modelIndex.column());
-        item->setText(item->text() + text);
+        QString str = tableView->model()->data(modelIndex).toString()+text;
+        tableView->model()->setData(modelIndex,str);
         goto label_end;
     }
 label_end:
@@ -170,8 +171,8 @@ label_end:
 void Soft_Keyboard::slot_Clean_PushBtn_Clicked(){
     QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(currentEditWidget);
     QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(currentEditWidget);
-    QListWidget* listWidget = dynamic_cast<QListWidget*>(currentEditWidget);
-    QTableWidget* tableWidget = dynamic_cast<QTableWidget*>(currentEditWidget);
+    QListView* listView = dynamic_cast<QListView*>(currentEditWidget);
+    QTableView* tableView = dynamic_cast<QTableView*>(currentEditWidget);
 
     if(currentLineEdit != NULL){
         currentLineEdit->insert("");
@@ -181,14 +182,14 @@ void Soft_Keyboard::slot_Clean_PushBtn_Clicked(){
         currentTextEdit->insertPlainText("");
         goto label_end;
     }
-    if(listWidget != NULL){
-        QListWidgetItem* item = listWidget->item(modelIndex.row());
-        item->setText("");
+    if(listView != NULL){
+        QString str = "";
+        listView->model()->setData(modelIndex,str);
         goto label_end;
     }
-    if(tableWidget != NULL){
-        QTableWidgetItem* item = tableWidget->item(modelIndex.row(),modelIndex.column());
-        item->setText("");
+    if(tableView != NULL){
+        QString str = "";
+        tableView->model()->setData(modelIndex,str);
         goto label_end;
     }
 label_end:
@@ -198,8 +199,8 @@ label_end:
 void Soft_Keyboard::slot_Space_PushBtn_Clicked(){
     QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(currentEditWidget);
     QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(currentEditWidget);
-    QListWidget* listWidget = dynamic_cast<QListWidget*>(currentEditWidget);
-    QTableWidget* tableWidget = dynamic_cast<QTableWidget*>(currentEditWidget);
+    QListView* listView = dynamic_cast<QListView*>(currentEditWidget);
+    QTableView* tableView = dynamic_cast<QTableView*>(currentEditWidget);
     QString text = " ";
     if(currentLineEdit != NULL){
         currentLineEdit->insert(text);
@@ -209,15 +210,14 @@ void Soft_Keyboard::slot_Space_PushBtn_Clicked(){
         currentTextEdit->append(text);
         goto label_end;
     }
-    if(listWidget != NULL){
-        QListWidgetItem* item = listWidget->item(modelIndex.row());
-        item->setText(item->text() + text);
+    if(listView != NULL){
+        QString str = listView->model()->data(modelIndex).toString() + " ";
+        listView->model()->setData(modelIndex,str);
         goto label_end;
     }
-    if(tableWidget != NULL){
-
-        QTableWidgetItem* item = tableWidget->item(modelIndex.row(),modelIndex.column());
-        item->setText(item->text() + text);
+    if(tableView != NULL){
+        QString str = tableView->model()->data(modelIndex).toString() + " ";
+        tableView->model()->setData(modelIndex,str);
         goto label_end;
     }
 label_end:
@@ -227,8 +227,8 @@ label_end:
 void Soft_Keyboard::slot_BackSpace_PusnBtn_Clicked(){
     QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(currentEditWidget);
     QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(currentEditWidget);
-    QListWidget* listWidget = dynamic_cast<QListWidget*>(currentEditWidget);
-    QTableWidget* tableWidget = dynamic_cast<QTableWidget*>(currentEditWidget);
+    QListView* listView = dynamic_cast<QListView*>(currentEditWidget);
+    QTableView* tableView = dynamic_cast<QTableView*>(currentEditWidget);
 
     if(currentLineEdit != NULL){
         currentLineEdit->backspace();
@@ -238,15 +238,16 @@ void Soft_Keyboard::slot_BackSpace_PusnBtn_Clicked(){
         currentTextEdit->textCursor().deletePreviousChar();
         goto label_end;
     }
-    if(listWidget != NULL){
-        QListWidgetItem* item = listWidget->item(modelIndex.row());
-        item->setText(item->text().remove(item->text().length()-1,1));
+    if(listView != NULL){
+        QString str = listView->model()->data(modelIndex).toString();
+        str = str.remove(str.length()-1,1);
+        listView->model()->setData(modelIndex,str);
         goto label_end;
     }
-    if(tableWidget != NULL){
-
-        QTableWidgetItem* item = tableWidget->item(modelIndex.row(),modelIndex.column());
-        item->setText(item->text().remove(item->text().length()-1,1));
+    if(tableView != NULL){
+        QString str = tableView->model()->data(modelIndex).toString();
+        str = str.remove(str.length()-1,1);
+        tableView->model()->setData(modelIndex,str);
         goto label_end;
     }
 label_end:
