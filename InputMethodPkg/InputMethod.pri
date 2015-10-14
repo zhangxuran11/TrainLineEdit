@@ -24,3 +24,6 @@ SOURCES += \
 RESOURCES +=
 
 FORMS +=
+
+OTHER_FILES += \
+    qss/mainframe.qss

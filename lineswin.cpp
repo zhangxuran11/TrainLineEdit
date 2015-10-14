@@ -6,13 +6,18 @@
 #include"bean.h"
 #include"globalinfo.h"
 #include<QSqlRecord>
+#include<QTimer>
 LineWin::LineWin(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LineWin)
 {
     ui->setupUi(this);
     GlobalInfo::getInstance()->lineW = this;
+    QTimer::singleShot(1,this,SLOT(init()));
 
+}
+void LineWin::init()
+{
     model = new QSqlTableModel(0,GlobalInfo::getInstance()->db->database);
     connect(model, SIGNAL(dataChanged(const QModelIndex&,const QModelIndex&)), this, SLOT(onItemChanged(const QModelIndex&,const QModelIndex&)));
 

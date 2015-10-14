@@ -11,10 +11,8 @@ DetailInfoWin::DetailInfoWin(QWidget *parent) :
 {
     GlobalInfo::getInstance()->detailW = this;
     ui->setupUi(this);
-
     model = new QSqlTableModel(0,GlobalInfo::getInstance()->db->database);
-
-
+    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 }
 
 DetailInfoWin::~DetailInfoWin()
