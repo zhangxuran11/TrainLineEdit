@@ -3,9 +3,7 @@
 
 #include <QMainWindow>
 
-#include"detailinfowin.h"
-#include "lineswin.h"
-
+#include "trainlinepanel.h"
 namespace Ui {
 class MainWindow;
 }
@@ -13,8 +11,8 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    LineWin* line_w;
-    DetailInfoWin* detail_w;
+
+    TrainLinePanel* trainLinePanel;
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();

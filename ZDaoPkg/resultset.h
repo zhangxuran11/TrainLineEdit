@@ -2,18 +2,18 @@
 #define RESULTSET_H
 #include<QList>
 #include<QMap>
-#include<QByteArray>
+#include<QVariant>
 #include<QString>
 class ResultRow
 {
-    QMap<QString,QByteArray> _resMap;
+    QMap<QString,QString> _resMap;
 
     friend class DBService;
-    void insert(const QString& key,const QByteArray value);
+    void insert(const QString& key,const QString& value);
 public:
-    const QByteArray getPara(const QString& paraName)const{return _resMap[paraName];}
+    const QString getPara(const QString& paraName)const{return _resMap[paraName];}
     int count()const{return _resMap.count();}
-    QByteArray getPara(int index)const{return _resMap[_resMap.keys()[index]];}
+    QString getPara(int index)const{return _resMap[_resMap.keys()[index]];}
     void print();
 };
 class ResultSet

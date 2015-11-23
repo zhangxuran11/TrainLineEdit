@@ -25,6 +25,8 @@ class Soft_Keyboard : public QDialog
     Q_OBJECT
     QModelIndex modelIndex;
     QObject* currentEditWidget;
+    QObject* senderWidget;
+    QLineEdit* lineEdit;
 public:
     Soft_Keyboard(QWidget *parent = 0);
     ~Soft_Keyboard();
@@ -52,6 +54,7 @@ private slots:
     void slot_Clean_PushBtn_Clicked();
     void slot_Space_PushBtn_Clicked();
     void slot_BackSpace_PusnBtn_Clicked();
+    void slot_OK_PusnBtn_Clicked();
 public slots:
     void show();
     void show(const QModelIndex&);

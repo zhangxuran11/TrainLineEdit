@@ -7,6 +7,7 @@
 QT       += core gui xml
 include(InputMethodPkg/InputMethod.pri)
 include(ZDaoPkg/ZDaoPkg.pri)
+include(TrainLineEditPkg/TrainLineEditPkg.pri)
 
 DEFINES += $$(ARCH)
 contains( DEFINES, arm ) {
@@ -23,20 +24,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    lineswin.cpp \
-    detailinfowin.cpp \
-    globalinfo.cpp \
-    bean.cpp
+    globalinfo.cpp
 
 HEADERS  += mainwindow.h \
-    lineswin.h \
-    detailinfowin.h \
-    globalinfo.h \
-    bean.h
+    globalinfo.h
 
 FORMS    += mainwindow.ui \
-    lineswin.ui \
-    detailinfowin.ui \
 
 
 OTHER_FILES += \

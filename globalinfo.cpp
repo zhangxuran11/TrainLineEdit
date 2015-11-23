@@ -1,6 +1,4 @@
 #include "globalinfo.h"
-#include"lineswin.h"
-#include"detailinfowin.h"
 GlobalInfo*  GlobalInfo::_instance = NULL;
 GlobalInfo::GlobalInfo()
 {

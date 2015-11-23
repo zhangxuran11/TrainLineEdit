@@ -2,40 +2,58 @@
 #include<QVariant>
 void Soft_Keyboard::show()
 {
-    currentEditWidget = sender();
+    senderWidget = sender();
+    QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(senderWidget);
+    QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(senderWidget);
+    QPushButton *currentBtnEdit = dynamic_cast<QPushButton*>(senderWidget);
+    if(currentTextEdit != NULL)
+        lineEdit->setText(currentTextEdit->toPlainText());
+    else if(currentLineEdit != NULL)
+        lineEdit->setText(currentLineEdit->text());
+    else if(currentBtnEdit != NULL)
+        lineEdit->setText(currentBtnEdit->text());
+
     QDialog::show();
+    raise();
+    lineEdit->setSelection(lineEdit->text().length(),0);
 }
 void Soft_Keyboard::show(const QModelIndex& _modelIndex)
 {
 //    QTableView* tableView;
 //    QListView* listView;
-    currentEditWidget = sender();
+    senderWidget = sender();
     modelIndex = _modelIndex;
+    QListView* listView = dynamic_cast<QListView*>(senderWidget);
+    QTableView* tableView = dynamic_cast<QTableView*>(senderWidget);
+    if(listView != NULL)
+        lineEdit->setText(listView->model()->data(modelIndex).toString());
+    else if(tableView != NULL)
+        lineEdit->setText( tableView->model()->data(modelIndex).toString());
+
     QDialog::show();
-//    tableView = dynamic_cast<QTableView*>(currentEditWidget);
-//    if(tableView != NULL)
-//    {
-//        tableView->itemDelegate()
-//        QTableWidgetItem* item = tableView->item(modelIndex.row(),modelIndex.column());
-//        if(item == NULL)
-//        {
-//            item = new QTableWidgetItem("");
-//            tableWidget->setItem(modelIndex.row(),modelIndex.column(),item);
-//        }
-//    }
-//    listView = dynamic_cast<QListView*>(currentEditWidget);
-//    if(listView != NULL)
-//    {
-//        QListWidgetItem* item = listWidget->item(modelIndex.row());
-//        if(item == NULL)
-//        {
-//            item = new QListWidgetItem("");
-//            listWidget->insertItem(modelIndex.row(),item);
-//        }
-//    }
+    raise();
+    lineEdit->setSelection(lineEdit->text().length(),0);
+}
+void Soft_Keyboard::slot_OK_PusnBtn_Clicked()
+{
+    QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(senderWidget);
+    QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(senderWidget);
+    QPushButton *currentBtnEdit = dynamic_cast<QPushButton*>(senderWidget);
+    QListView* listView = dynamic_cast<QListView*>(senderWidget);
+    QTableView* tableView = dynamic_cast<QTableView*>(senderWidget);
+    if(currentTextEdit != NULL)
+        currentTextEdit->setText(lineEdit->text());
+    else if(currentLineEdit != NULL)
+        currentLineEdit->setText(lineEdit->text());
+    else if(currentBtnEdit != NULL)
+        currentBtnEdit->setText(lineEdit->text());
+    else if(listView != NULL)
+        listView->model()->setData(modelIndex,lineEdit->text());
+    else if(tableView != NULL)
+        tableView->model()->setData(modelIndex,lineEdit->text());
+    close();
 
 }
-
 Soft_Keyboard::Soft_Keyboard(QWidget *parent) : QDialog(parent)
 {
 
@@ -74,7 +92,7 @@ Soft_Keyboard::Soft_Keyboard(QWidget *parent) : QDialog(parent)
     pushBtn_Clean = new QPushButton("Clean");
     pushBtn_Space = new QPushButton("Space");
     pushBtn_Backspace = new QPushButton("BackSpace");
-    pushBtn_Quit = new QPushButton("Quit");
+    pushBtn_Quit = new QPushButton("OK");
 
     pushBtn_Clean->setStyleSheet("width:120px; height: 35px; color:rgb(39, 83, 102); border:none; border-radius:10px; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 rgba(188, 222, 237, 255), stop:1 rgba(116, 173, 196, 255)); font-size:20px;");
     pushBtn_Space->setStyleSheet("width:120px; height: 35px; color:rgb(39, 83, 102); border:none; border-radius:10px; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,stop:0 rgba(188, 222, 237, 255), stop:1 rgba(116, 173, 196, 255)); font-size:20px;");
@@ -89,7 +107,7 @@ Soft_Keyboard::Soft_Keyboard(QWidget *parent) : QDialog(parent)
     connect(pushBtn_Clean, SIGNAL(clicked()), this, SLOT(slot_Clean_PushBtn_Clicked()));
     connect(pushBtn_Space, SIGNAL(clicked()), this, SLOT(slot_Space_PushBtn_Clicked()));
     connect(pushBtn_Backspace, SIGNAL(clicked()), this, SLOT(slot_BackSpace_PusnBtn_Clicked()));
-    connect(pushBtn_Quit, SIGNAL(clicked()), this, SLOT(close()));
+    connect(pushBtn_Quit, SIGNAL(clicked()), this, SLOT(slot_OK_PusnBtn_Clicked()));
 
     hBoxLayout->addStretch();
     hBoxLayout->addWidget(pushBtn_Clean);
@@ -101,6 +119,11 @@ Soft_Keyboard::Soft_Keyboard(QWidget *parent) : QDialog(parent)
     hBoxLayout->addWidget(pushBtn_Quit);
     hBoxLayout->addStretch();
 
+    lineEdit = new QLineEdit;
+    lineEdit->setFixedSize(550,40);
+
+    vBoxLayout->addWidget(lineEdit);
+    currentEditWidget = lineEdit;
     vBoxLayout->addWidget(tabWidget);
     vBoxLayout->addLayout(hBoxLayout);
 
@@ -138,6 +161,7 @@ void Soft_Keyboard::slot_Letter_PushBtn_Clicked(){
     QPushButton *aPushButton = dynamic_cast<QPushButton*>(sender());
     QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(currentEditWidget);
     QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(currentEditWidget);
+    QPushButton *currentBtnEdit = dynamic_cast<QPushButton*>(currentEditWidget);
     QListView* listView = dynamic_cast<QListView*>(currentEditWidget);
     QTableView* tableView = dynamic_cast<QTableView*>(currentEditWidget);
     QString text;
@@ -151,6 +175,10 @@ void Soft_Keyboard::slot_Letter_PushBtn_Clicked(){
     }
     if(currentTextEdit != NULL){
         currentTextEdit->append(text);
+        goto label_end;
+    }
+    if(currentBtnEdit != NULL){
+        currentBtnEdit->setText(currentBtnEdit->text()+text);
         goto label_end;
     }
     if(listView != NULL){
@@ -169,17 +197,22 @@ label_end:
 }
 
 void Soft_Keyboard::slot_Clean_PushBtn_Clicked(){
+    QPushButton *currentBtnEdit = dynamic_cast<QPushButton*>(currentEditWidget);
     QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(currentEditWidget);
     QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(currentEditWidget);
     QListView* listView = dynamic_cast<QListView*>(currentEditWidget);
     QTableView* tableView = dynamic_cast<QTableView*>(currentEditWidget);
 
+    if(currentBtnEdit != NULL){
+        currentBtnEdit->setText("");
+        goto label_end;
+    }
     if(currentLineEdit != NULL){
-        currentLineEdit->insert("");
+        currentLineEdit->setText("");
         goto label_end;
     }
     if(currentTextEdit != NULL){
-        currentTextEdit->insertPlainText("");
+        currentTextEdit->setPlainText("");
         goto label_end;
     }
     if(listView != NULL){
@@ -197,11 +230,16 @@ label_end:
 }
 
 void Soft_Keyboard::slot_Space_PushBtn_Clicked(){
+    QPushButton *currentBtnEdit = dynamic_cast<QPushButton*>(currentEditWidget);
     QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(currentEditWidget);
     QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(currentEditWidget);
     QListView* listView = dynamic_cast<QListView*>(currentEditWidget);
     QTableView* tableView = dynamic_cast<QTableView*>(currentEditWidget);
     QString text = " ";
+    if(currentBtnEdit != NULL){
+        currentBtnEdit->setText(currentBtnEdit->text()+text);
+        goto label_end;
+    }
     if(currentLineEdit != NULL){
         currentLineEdit->insert(text);
         goto label_end;
@@ -225,11 +263,16 @@ label_end:
 }
 
 void Soft_Keyboard::slot_BackSpace_PusnBtn_Clicked(){
+    QPushButton *currentBtnEdit = dynamic_cast<QPushButton*>(currentEditWidget);
     QTextEdit *currentTextEdit = dynamic_cast<QTextEdit*>(currentEditWidget);
     QLineEdit* currentLineEdit = dynamic_cast<QLineEdit*>(currentEditWidget);
     QListView* listView = dynamic_cast<QListView*>(currentEditWidget);
     QTableView* tableView = dynamic_cast<QTableView*>(currentEditWidget);
 
+    if(currentBtnEdit != NULL){
+        currentBtnEdit->setText(currentBtnEdit->text().left(currentBtnEdit->text().length()-1));
+        goto label_end;
+    }
     if(currentLineEdit != NULL){
         currentLineEdit->backspace();
         goto label_end;
@@ -253,3 +296,4 @@ void Soft_Keyboard::slot_BackSpace_PusnBtn_Clicked(){
 label_end:
     return;
 }
+

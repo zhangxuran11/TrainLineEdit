@@ -13,7 +13,7 @@ void ResultRow::print()
 ResultSet::ResultSet()
 {
 }
-void ResultRow::insert(const QString& key,const QByteArray value)
+void ResultRow::insert(const QString& key,const QString& value)
 {
     _resMap.insert(key,value);
 }

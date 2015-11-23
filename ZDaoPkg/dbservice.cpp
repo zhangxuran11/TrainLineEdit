@@ -55,7 +55,7 @@ ResultSet  DBService::query(const QString& sqlQuery)
             ResultRow resMap;
             for(int i = 0;i < record.count();i++)
             {
-                resMap.insert(record.fieldName(i),sql_query.value(i).toByteArray());
+                resMap.insert(record.fieldName(i),sql_query.value(i).toString());
             }
             results.resultList.append(resMap);
         }
