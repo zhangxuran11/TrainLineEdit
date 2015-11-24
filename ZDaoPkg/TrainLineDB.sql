@@ -21,9 +21,9 @@ CREATE TABLE tb_station_info (
 DROP TABLE IF EXISTS tb_railway_info;
 CREATE TABLE tb_railway_info (
           sample_id INTEGER   PRIMARY KEY AUTOINCREMENT,
-          line_id INTEGER NOT NULL,
-          lng real NOT NULL,
-          lat real NOT NULL,
+          line_id INTEGER ,
+          lng real ,
+          lat real ,
           sea_level real);
 
 insert into tb_lines_info (line_id,line_name,start_station_id,end_station_id,train_id) values (1,'testline',1,8,23);

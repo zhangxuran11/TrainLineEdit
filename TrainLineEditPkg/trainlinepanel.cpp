@@ -143,7 +143,7 @@ void TrainLinePanel::init()
             }
             connect(tableWidget,SIGNAL(itemChanged(QTableWidgetItem*)),this,SLOT(updateDatabase(QTableWidgetItem*)));
         }
-qDebug("2222");
+        if(1)
         {
             //add railway info table
             QTableWidget *tableWidget = new QTableWidget;
@@ -158,7 +158,7 @@ qDebug("2222");
             list_table_map.insert(listItem->text()+"_railway",tableWidget);
             ui->stackedWidget->addWidget(tableWidget);
 
-            QString sql = QString("select sample_id,line_id,lng,lat,sea_level  from tb_station_info where line_id=%1").arg(set[i].getPara("line_id"));
+            QString sql = QString("select sample_id,line_id,lng,lat,sea_level  from tb_railway_info where line_id=%1").arg(set[i].getPara("line_id"));
             ResultSet rowSet = GlobalInfo_t::getInstance()->db->query(sql);
 
             tableWidget->setColumnCount(5);
@@ -277,6 +277,11 @@ void TrainLinePanel::on_delete_line_btn_clicked()
 
 void TrainLinePanel::on_add_station_btn_clicked()
 {
+    QTableWidget* tableWidget =  dynamic_cast<QTableWidget*>(ui->stackedWidget->currentWidget());
+    if(tableWidget == NULL)
+        return;
+    if(tableWidget->horizontalHeaderItem(0)->text() != "station id")
+        return ;
     QListWidgetItem* item = ui->listWidget->currentItem();
     int index = ui->listWidget->currentRow();
     if(item == NULL)
@@ -290,44 +295,7 @@ void TrainLinePanel::on_add_station_btn_clicked()
     on_listWidget_itemClicked(ui->listWidget->currentItem());
 }
 
-//void TrainLinePanel::on_tableWidget_itemChanged(QTableWidgetItem *item)
-//{
-//    if(ui->tableWidget->currentRow() == -1)
-//        return;
-//    QString station_id = ui->tableWidget->item(ui->tableWidget->currentRow(),0)->text();
-//    QString sql;
-//    QString columnName;
-//    QString value;
-//    switch(ui->tableWidget->currentColumn())
-//    {
-//    case 1:
-//        columnName = "station_name_en";
-//        value = QString("'%1'").arg(item->text());
-//        break;
-//    case 2:
-//        columnName = "station_name_th";
-//        value = QString("'%1'").arg(item->text());
-//        break;
-//    case 3:
-//        columnName = "start_time";
-//        value = QString("'%1'").arg(item->text());
-//        break;
-//    case 4:
-//        columnName = "arrive_time";
-//        value = QString("'%1'").arg(item->text());
-//        break;
-//    case 5:
-//        columnName = "lat";
-//        value = QString("%1").arg(item->text());
-//        break;
-//    case 6:
-//        columnName = "lng";
-//        value = QString("%1").arg(item->text());
-//        break;
-//    }
-//    sql = QString("update tb_station_info set %1=%2 where station_id=%3").arg(columnName).arg(value).arg(station_id);
-//    GlobalInfo_t::getInstance()->db->exec(sql);
-//}
+
 
 void TrainLinePanel::show()
 {
@@ -436,18 +404,77 @@ void TrainLinePanel::on_delete_station_btn_clicked()
 {
     QTableWidget* tableWidget =  dynamic_cast<QTableWidget*>(ui->stackedWidget->currentWidget());
     int index = ui->listWidget->currentRow();
-    if(tableWidget != NULL)
-    {
-        if(tableWidget->horizontalHeaderItem(0)->text() == "station id")
-        {
-            QTableWidgetItem* currentItem = tableWidget->currentItem();
-            QString sql = QString("delete from tb_station_info where station_id=%1").arg(tableWidget->item(currentItem->row(),0)->text());
-            GlobalInfo_t::getInstance()->db->exec(sql);
-        }
-    }
+    if(tableWidget == NULL)
+        return;
+
+    if(tableWidget->horizontalHeaderItem(0)->text() != "station id")
+        return;
+
+    QTableWidgetItem* currentItem = tableWidget->currentItem();
+    if(currentItem == NULL)
+        return;
+    QString sql = QString("delete from tb_station_info where station_id=%1").arg(tableWidget->item(currentItem->row(),0)->text());
+    GlobalInfo_t::getInstance()->db->exec(sql);
     init();
     ui->listWidget->setCurrentRow(index);
     ui->listWidget->setCurrentItem(ui->listWidget->item(index));
     on_listWidget_itemClicked(ui->listWidget->currentItem());
 
+}
+
+
+void TrainLinePanel::on_add_sample_btn_clicked()
+{
+    QTableWidget* tableWidget =  dynamic_cast<QTableWidget*>(ui->stackedWidget->currentWidget());
+    if(tableWidget == NULL)
+        return;
+    if(tableWidget->horizontalHeaderItem(0)->text() != "sample id")
+        return ;
+    QListWidgetItem* item = ui->listWidget->currentItem();
+    int index = ui->listWidget->currentRow();
+    if(item == NULL)
+        return;
+    QStringList strList = item->text().split(QChar(':'));
+    QString sql = QString("insert into tb_railway_info(line_id) select line_id from tb_lines_info where train_id=%1 and line_name='%2'").arg(strList[0]).arg(strList[1]);
+    GlobalInfo_t::getInstance()->db->exec(sql);
+    init();
+    ui->listWidget->setCurrentRow(index);
+    ui->listWidget->setCurrentItem(ui->listWidget->item(index));
+    on_listWidget_itemClicked(ui->listWidget->currentItem());
+    on_railway_btn_clicked();
+}
+
+void TrainLinePanel::on_delete_sample_btn_clicked()
+{
+    QTableWidget* tableWidget =  dynamic_cast<QTableWidget*>(ui->stackedWidget->currentWidget());
+    int index = ui->listWidget->currentRow();
+    if(tableWidget == NULL)
+        return;
+
+    if(tableWidget->horizontalHeaderItem(0)->text() != "sample id")
+        return ;
+
+    QTableWidgetItem* currentItem = tableWidget->currentItem();
+    if(currentItem == NULL)
+        return;
+    QString sql = QString("delete from tb_railway_info where sample_id=%1").arg(tableWidget->item(currentItem->row(),0)->text());
+    GlobalInfo_t::getInstance()->db->exec(sql);
+
+    init();
+    ui->listWidget->setCurrentRow(index);
+    ui->listWidget->setCurrentItem(ui->listWidget->item(index));
+    on_listWidget_itemClicked(ui->listWidget->currentItem());
+    on_railway_btn_clicked();
+
+}
+void TrainLinePanel::insertRailwayTestData(const QPointF& p_start,const QPointF& p_end,int count)//insert into database tb_railway_info
+{
+    qreal dx = (p_end.x()-p_start.x())/count;
+    qreal dy = (p_end.y()-p_start.y())/count;
+    QString sql;
+    for(int i = 0;i < count;i++)
+    {
+        sql = QString("insert into tb_railway_info (line_id,lng,lat,sea_level) values (1,%1,%2,17.7);").arg(p_start.x()+dx*i).arg(p_start.y()+dy*i);
+        GlobalInfo_t::getInstance()->db->exec(sql);
+    }
 }

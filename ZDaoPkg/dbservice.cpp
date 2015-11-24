@@ -32,6 +32,7 @@ void DBService::close()
 }
 ResultSet  DBService::query(const QString& sqlQuery)
 {
+//    qDebug()<<"query sql : "<<sqlQuery;
     ResultSet results;
     isValid = true;
     if(!open())
@@ -66,6 +67,7 @@ ResultSet  DBService::query(const QString& sqlQuery)
 }
 bool  DBService::exec(const QString& sqlInsert)
 {
+//    qDebug()<<"exec sql : "<<sqlInsert;
     bool res = false;
     if(!database.open())
     {
@@ -82,7 +84,7 @@ bool  DBService::exec(const QString& sqlInsert)
         }
         else
         {
-            qDebug()<<"inserted!";
+//            qDebug()<<"inserted!";
             sql_query.exec("VACUUM");
             res = true;
         }

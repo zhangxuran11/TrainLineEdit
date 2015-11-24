@@ -443,6 +443,46 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
     <string>Delete Station</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="add_sample_btn">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>650</y>
+     <width>151</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 255, 255);
+selection-color: rgb(255, 89, 211);
+selection-background-color: rgb(167, 188, 255);
+font: 900 14pt &quot;Ubuntu&quot;;
+background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1, stop:0 rgba(29, 151, 179, 255), stop:0.458128 rgba(177, 241, 255, 255), stop:1 rgba(23, 172, 209, 255));</string>
+   </property>
+   <property name="text">
+    <string>Add sample</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="delete_sample_btn">
+   <property name="geometry">
+    <rect>
+     <x>810</x>
+     <y>600</y>
+     <width>151</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 255, 255);
+selection-color: rgb(255, 89, 211);
+selection-background-color: rgb(167, 188, 255);
+font: 900 14pt &quot;Ubuntu&quot;;
+background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1, stop:0 rgba(29, 151, 179, 255), stop:0.458128 rgba(177, 241, 255, 255), stop:1 rgba(23, 172, 209, 255));</string>
+   </property>
+   <property name="text">
+    <string>Delete sample</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

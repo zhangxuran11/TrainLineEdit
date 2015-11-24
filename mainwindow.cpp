@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
    // setWindowFlags(Qt::FramelessWindowHint|(windowFlags() & (~Qt::WindowCloseButtonHint)));
     ui->setupUi(this);
     trainLinePanel = new TrainLinePanel(this);
+    //trainLinePanel->insertRailwayTestData(QPointF(98.116252,-9.873845 ),QPointF(104.615845,-10.163175),10000);
 
 }
 

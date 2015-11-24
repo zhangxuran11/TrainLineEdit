@@ -3,7 +3,6 @@
 
 
 #include"dbservice.h"
-#include"bean.h"
 class LineWin;
 class DetailInfoWin;
 class GlobalInfo
@@ -18,7 +17,6 @@ public:
     LineWin* lineW;
     DetailInfoWin* detailW;
 
-    LineInfoMap lineInfoMap;
     //StationMap stationMap;
 };
 

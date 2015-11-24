@@ -18,6 +18,7 @@ public:
     ~TrainLinePanel();
     void show();
     void hide();
+    void insertRailwayTestData(const QPointF& p_start,const QPointF& p_end,int count);//just for test
 signals:
     void changeCurrentLine(int line_id);
 private slots:
@@ -32,6 +33,10 @@ private slots:
     void on_railway_btn_clicked();
     void updateDatabase(QTableWidgetItem*);
     void on_delete_station_btn_clicked();
+    void on_add_sample_btn_clicked();
+
+    void on_delete_sample_btn_clicked();
+
 private:
 
     void saveStation();
