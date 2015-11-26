@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1058</width>
-    <height>706</height>
+    <width>1151</width>
+    <height>692</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,8 +23,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>151</width>
-     <height>551</height>
+     <width>211</width>
+     <height>661</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -111,24 +111,24 @@ QListView::item:hover{
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>210</x>
      <y>0</y>
-     <width>651</width>
-     <height>551</height>
+     <width>941</width>
+     <height>661</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="page_3">
     <widget class="QPushButton" name="add_line_ok_btn">
      <property name="geometry">
       <rect>
-       <x>380</x>
-       <y>370</y>
+       <x>560</x>
+       <y>430</y>
        <width>111</width>
        <height>51</height>
       </rect>
@@ -147,8 +147,8 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
     <widget class="QPushButton" name="line_name_lineEdit">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>260</y>
+       <x>420</x>
+       <y>320</y>
        <width>271</width>
        <height>61</height>
       </rect>
@@ -167,8 +167,8 @@ border-bottom-right-radius:10px;</string>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>260</y>
+       <x>260</x>
+       <y>320</y>
        <width>161</width>
        <height>61</height>
       </rect>
@@ -191,8 +191,8 @@ border-color:rgb(7, 76, 95);</string>
     <widget class="QPushButton" name="train_id_lineEdit">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>140</y>
+       <x>420</x>
+       <y>200</y>
        <width>271</width>
        <height>51</height>
       </rect>
@@ -211,8 +211,8 @@ border-bottom-right-radius:10px;</string>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>140</y>
+       <x>260</x>
+       <y>200</y>
        <width>161</width>
        <height>51</height>
       </rect>
@@ -237,8 +237,8 @@ border-color:rgb(7, 76, 95);</string>
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>230</y>
+       <x>200</x>
+       <y>250</y>
        <width>261</width>
        <height>71</height>
       </rect>
@@ -261,8 +261,8 @@ border-color:rgb(7, 76, 95);</string>
     <widget class="QLabel" name="currentLineLabel">
      <property name="geometry">
       <rect>
-       <x>300</x>
-       <y>230</y>
+       <x>460</x>
+       <y>250</y>
        <width>291</width>
        <height>71</height>
       </rect>
@@ -286,10 +286,10 @@ border-bottom-right-radius:10px;</string>
   <widget class="QPushButton" name="setCurLineBtn">
    <property name="geometry">
     <rect>
-     <x>840</x>
-     <y>70</y>
-     <width>171</width>
-     <height>91</height>
+     <x>1330</x>
+     <y>100</y>
+     <width>101</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -306,10 +306,10 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
   <widget class="QPushButton" name="runStateBtn">
    <property name="geometry">
     <rect>
-     <x>890</x>
-     <y>230</y>
-     <width>161</width>
-     <height>111</height>
+     <x>1320</x>
+     <y>200</y>
+     <width>111</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -327,7 +327,7 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>580</y>
+     <y>660</y>
      <width>121</width>
      <height>32</height>
     </rect>
@@ -346,8 +346,8 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
   <widget class="QPushButton" name="add_station_btn">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>630</y>
+     <x>270</x>
+     <y>660</y>
      <width>151</width>
      <height>32</height>
     </rect>
@@ -366,8 +366,8 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
   <widget class="QPushButton" name="delete_line_btn">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>590</y>
+     <x>120</x>
+     <y>660</y>
      <width>151</width>
      <height>32</height>
     </rect>
@@ -386,8 +386,8 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
   <widget class="QPushButton" name="ok_btn">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>620</y>
+     <x>1010</x>
+     <y>660</y>
      <width>141</width>
      <height>32</height>
     </rect>
@@ -406,8 +406,8 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
   <widget class="QPushButton" name="railway_btn">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>580</y>
+     <x>870</x>
+     <y>660</y>
      <width>141</width>
      <height>32</height>
     </rect>
@@ -426,7 +426,7 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
   <widget class="QPushButton" name="delete_station_btn">
    <property name="geometry">
     <rect>
-     <x>340</x>
+     <x>420</x>
      <y>660</y>
      <width>151</width>
      <height>32</height>
@@ -446,8 +446,8 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
   <widget class="QPushButton" name="add_sample_btn">
    <property name="geometry">
     <rect>
-     <x>590</x>
-     <y>650</y>
+     <x>570</x>
+     <y>660</y>
      <width>151</width>
      <height>32</height>
     </rect>
@@ -466,8 +466,8 @@ background-color: qlineargradient(spread:repeat, x1:0.468, y1:0, x2:0.463, y2:1,
   <widget class="QPushButton" name="delete_sample_btn">
    <property name="geometry">
     <rect>
-     <x>810</x>
-     <y>600</y>
+     <x>720</x>
+     <y>660</y>
      <width>151</width>
      <height>32</height>
     </rect>

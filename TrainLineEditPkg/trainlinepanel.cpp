@@ -310,7 +310,7 @@ void TrainLinePanel::hide()
 }
 void TrainLinePanel::on_ok_btn_clicked()
 {
-    saveStation();
+    //saveStation();
     hide();
 }
 void TrainLinePanel::saveStation()
